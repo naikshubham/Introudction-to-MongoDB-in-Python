@@ -7,9 +7,11 @@ MongoDB is a tool to explore data structured as you see fit. As a NoSQL database
 - **JSON is also the basis of MongoDB data format**
 - JSON has two collection structures **Objects {}** and **Arrays []**.
 - **Objects {}** maps string **keys to values** and **Arrays [] order values**
+
 <p align="center">
   <img src="./images/JSON.JPG" width="350" title="JSON">
 </p>
+
 - **Values** : can be **strings** `'name':'Donny Winston`, **numbers** `'id':12345`, `true / false`, `null` or **Another array** `'tags':['Python', MongoDB']` or **Another Object** `[{'id' : 12345, ....},....]`
 
 ### JSON <> Python
@@ -46,7 +48,7 @@ db = client["nobel"]
 
 for collection_name in ['prizes', 'laureates']:
     # collect the data from the API
-    response = requests.get("http://api.nobelprize.org/v1/{}.json".\format(collection_name[:-1]))
+    response = requests.get("http://api.nobelprize.org/v1/{}.json".format(collection_name[:-1]))
     # convert the data to json
     documents = response.json()[collection_name]
     # create collections on the fly
@@ -91,11 +93,24 @@ n_laureates = db.laureates.count_documents(filter)
 
 ```python
 # find document to inspect
-doc = bd.prizes.find_one(filter)
+doc = db.prizes.find_one(filter)
 ```
 
+### Listing databases and collections
+- Our **`MongoClient()`** object is not actually a dictionary, so we can't call **`keys()`** to list the names of accessible databases.The same is true for listing collections of a database.
+- Instead, we can list database names by calling **`.list_database_names()`** on a client instance, and we can list collection names by calling **`.list_collection_names()`** on a database instance.
 
+#### save a list of names of the databases managed b client
+```python
+db_names = client.list_database_names()
+print(db_names)
+```
 
+#### save a list of names of the collections managed by the 'nobel' database
+```python
+nobel_coll_names = client['nobel'].list_collection_names()
+print(nobel_coll_names)
+```
 
 
 
