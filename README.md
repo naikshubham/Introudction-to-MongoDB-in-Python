@@ -112,6 +112,100 @@ nobel_coll_names = client['nobel'].list_collection_names()
 print(nobel_coll_names)
 ```
 
+### Query a collection to find documents of interest
+To find document satisfying some criteria we express the criteria as a document.
+
+### Filters as (sub)documents
+Count documents by providing a filter document to match
+
+```python
+filter_doc = {
+'born' : '1845-03-27',
+'diedCountry' : 'Germany',
+'gender' : 'male',
+'surname' : 'Rontgen'
+}
+
+db.laureates.count_documents(filter_doc)
+```
+
+#### Simple filters
+
+```python
+db.laureates.count_documents({'gender':'female'})
+```
+
+There are 48 laureates documents with gender equal to female. We can do the same for other feilds, like:
+- country of death
+
+```python
+db.laureates.count_documents({'diedCountry' : 'France'})
+```
+
+- city of birth
+
+```python
+db.laureates.count_documents({'bornCity' : 'Warsaw'})
+```
+
+#### Composing filters
+Also we can merge criterias in a single filter document.This filter document will have the same form as matching documents.
+
+```python
+filter_doc = {'gender':'female',
+	      'diedCountry':'France',
+	      'bornCity':'Warsaw'}
+
+db.laureates.count_documents(filter_doc)
+
+db.laureates.find_one(filter_doc)
+```
+
+### Query operators
+We have seen filters that match exact values in the document. What about satisying other constraints?
+- Query operators are like different ways to input values on the website form, some values are selected using options, some are selected using range slider.Query operators in MongoDB works the same way.
+- We place a **`operator`** in a filter document to wrap around the feild and its exceptable values.
+
+**Query Syntax**
+```python
+{
+# match a single value exactly
+	'field_name1':value1,
+# use operators
+	'field_name2':{
+	$operator1:value1,
+	$operator2:value2,
+	... # more operators
+	},
+	... # more fields
+}
+```
+- e.g Let's find document where the value diedCountry is either France or USA.
+
+```python
+db.laureates.count_documents({
+	'diedCountry':{'$in':['France', 'USA']}})
+```
+
+- We use the **`$in`** operator to wrap around acceptable values. Operators in MongoDB has a **`$`** sign prefix.
+- To find DiedCountry in not equal to certain country we can use the **`$ne`**
+
+```python
+db.laureates.count_documents({
+	'diedCountry':{'$ne':'France'}})
+```
+
+#### Comparison
+- > : $gt, >= : $gte
+- < : $lt, <= : $lte
+
+```python
+db.laureates.count_documents({
+	'diedCountry':{'$gt':'Belgium', '$lte':'USA'}})
+```
+
+- Strings are compared in lexicographically(alphabetical order).
+
 
 
 
