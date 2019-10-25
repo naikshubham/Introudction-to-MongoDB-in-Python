@@ -206,6 +206,9 @@ db.laureates.count_documents({
 
 - Strings are compared in lexicographically(alphabetical order).
 
+### Dot Notation : reach into substructure
+- To query arrays and sub documents.
+
 
 
 
