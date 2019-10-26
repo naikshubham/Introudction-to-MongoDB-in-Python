@@ -207,7 +207,72 @@ db.laureates.count_documents({
 - Strings are compared in lexicographically(alphabetical order).
 
 ### Dot Notation : reach into substructure
-- To query arrays and sub documents.
+- To query arrays and sub documents. Dot notation is how MongoDB allows us to query substructure.
+
+```python
+db.laureates.find_one({
+    "firstname":"Walter",
+    "surname":"Kohn"})
+    
+db.laureates.count_documents({
+"prizes.affiliations.name":("University of California")})
+
+db.laureates.count_documents({
+"prizes.affiliations.city":("Berkeley, CA")})
+```
+
+- MongoDB allows us the specify and enforce a schema for a collection, but this is not required. For e.g fields do not require to have same type of value across documents in a collections.
+- Using the **`exists`** operator we can query for the existence or non existence of fields. 
+
+```python
+db.laureates.count_documents({"bornCountry":{"$exists":False}})
+```
+- Check if the value exists for prizes.
+
+```python
+db.laureates.count_documents({"prizes":{$exists":True}})
+
+# value exists for field 0 within the prizes field
+db.laureates.count_documents({"prizes.0":{$exists":True}})
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
